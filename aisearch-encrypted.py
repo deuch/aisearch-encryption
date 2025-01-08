@@ -104,7 +104,9 @@ async def main():
   content_response = client.embeddings.create(input=content, model=embedding_model_name, dimensions=azure_openai_embedding_dimensions)
   content_embeddings = [item.embedding for item in content_response.data]
   
-  key_bytes = b"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  # The symetrical key need to be strong ....
+  # You can generate one with this command for a 128 bytes key: openssl rand -hex 128
+  key_bytes = b"49cdae0806d2d5edc5d3fe05f2f535591100e8cf6c6905c86fbcd26859986dbdcd2e803ec130920ff78281358a316a14ae2ce5c90127eeac8ba7ca08df1de4874abfe9d04c6d8e1847dda513da3a1eaee7970c9165e7834230eb04cfb444755feea82dacceb8d4c6460f4a6baef73b2236cdcb9fb478e98812862ce92fe1b48f"
   standalone_secret = alloy.StandaloneSecret(1, alloy.Secret(key_bytes))
   approximation_factor = 2.5
   vector_secrets = {
@@ -136,7 +138,7 @@ async def main():
           )
           # Some questions contain HTML tags that muddle the results, so we'll skip inserting those ones
       
-      #Encrypt Content an Vector
+      # Encrypt Content and Vector
       (encrypted_contentVector, encrypted_contentContent) = await asyncio.gather(
           alloy_client.vector().encrypt(contentText_vector, metadata),
           alloy_client.standard_attached().encrypt(
@@ -144,7 +146,7 @@ async def main():
           ) )
       
   
-      #Encrypt Title an Vector
+      # Encrypt Title and Vector
       (encrypted_titlevector, encrypted_Titlecontent) =  await asyncio.gather(
           alloy_client.vector().encrypt(titleText_vector, metadata),
           alloy_client.standard_attached().encrypt(
@@ -152,14 +154,13 @@ async def main():
           )   
       )
       
+      # Replace all the values with the encrypted ones
       item['title'] = base64.b64encode(encrypted_Titlecontent).decode()
       item['content'] =  base64.b64encode(encrypted_contentContent).decode()
       item['titleVector'] = encrypted_titlevector.encrypted_vector
       item['contentVector'] = encrypted_contentVector.encrypted_vector
-
-      
   
-  # Output embeddings to docVectors.json file
+  # Output embeddings to docVectorsEncrypted.json file
   output_path = os.path.join('output', 'docVectorsEncrypted.json')
   output_directory = os.path.dirname(output_path)
   if not os.path.exists(output_directory):
@@ -258,7 +259,7 @@ async def main():
 
   #  50 is an optimal value for k_nearest_neighbors when performing vector search
   #  To learn more about how vector ranking works, please visit https://learn.microsoft.com/azure/search/vector-search-ranking
-
+  # Use the encrypted embedded query for the search
   vector_query = VectorizedQuery(vector=query_vector, k_nearest_neighbors=50, fields="contentVector, titleVector")
  
   results = search_client.search(  
