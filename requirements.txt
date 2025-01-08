@@ -1,0 +1,5 @@
+python-dotenv
+azure-search-documents==11.6.0b7
+azure-identity
+openai
+ironcore-alloy>=0.10.3,<0.11
