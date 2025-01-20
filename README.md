@@ -1,6 +1,6 @@
 # aisearch-encryption
 
-This repo is a demonstration to use cloackedAI from ironcorelabs with AI Search to do some pure Vector search on encrypted datas.  
+This repo is a demonstration to use [cloakedAI from ironcorelabs](https://ironcorelabs.com/products/cloaked-ai/) with AI Search to do some pure Vector search on encrypted datas.  
 Those datas are encrypted with Property-preserving Encryption and let the AI Search engine to do some cosine similarity on the encrypted vector.  
 Content of the chunks are encrypted too, so it is not possible to do a hybrid search with a text on them.  
 
@@ -50,7 +50,11 @@ What happens ?
 * Insertion of the data (encrypted) in the index
 * Do a search in AI Search (*pure Vector search not a hybrid one*) **directly on the encrypted datas** (Property-preserving Encryption)
 
-You can check directly in your AI Search index that the data and vector are encrypted (you may need to switch beteen API Key authentication and System Managed Indentity on the Ai Search to be able to see the vector. The 2 vectors fields are not retrievable by default, so you have to enable it too)
+You can check directly in your AI Search index that the data and vector are encrypted (you may need to switch beteen API Key authentication and System Managed Indentity on the Ai Search to be able to see the vector. The 2 vectors fields are not retrievable by default, so you have to enable it too. Maybe something to improve in the future :))
+
+Some changes can be made to use determinist encryption to be able to use filter in the request (to filter on category for example). In the code, i use a non determinist encryption for chuncks so you can not search within this data in "plaintext" mode.
+
+
 
 
 
