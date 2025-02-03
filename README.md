@@ -52,7 +52,7 @@ What happens ?
 
 You can check directly in your AI Search index that the data and vector are encrypted (you may need to switch beteen API Key authentication and System Managed Indentity on the Ai Search to be able to see the vector. The 2 vectors fields are not retrievable by default, so you have to enable it too. Maybe something to improve in the future :))
 
-Some changes can be made to use determinist encryption to be able to use filter in the request (to filter on category for example). In the code, i use a non determinist encryption for chuncks so you can not search within this data in "plaintext" mode.
+Some changes can be made to use determinist encryption to be able to use filter in the request (to filter on category for example). In the code, i use a non deterministic encryption for chuncks so you can not search within this data in "plaintext" mode. (Available soon :))
 
 
 
